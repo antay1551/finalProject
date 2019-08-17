@@ -1,0 +1,11 @@
+.map-content {
+    overflow: hidden;
+    padding-bottom: 56.25%;
+    position: relative;
+    height: 0;
+}
+
+.search-input {
+    display: flex;
+    justify-content: center;
+}
