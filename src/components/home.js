@@ -2,6 +2,7 @@ import React from 'react';
 import '../style/home.css';
 import Map from "./Map"
 import LocationSearchInput from "./LocationSearch";
+import WatchPosition from "./watchPosition";
 
 class Home extends React.Component {
 constructor(props) {
@@ -15,7 +16,10 @@ render() {
 		<LocationSearchInput />
 	</div>
 	<div className="map-content">
-		<Map/>
+		<Map />
+	</div>
+	<div>
+		<WatchPosition />
 	</div>
 	</div>
 	

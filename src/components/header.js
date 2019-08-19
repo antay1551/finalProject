@@ -32,6 +32,7 @@ class Header extends React.Component {
 							<li><Link to="/">Home</Link></li>
 							<li><Link to="/about/">About</Link></li>
 							{localStorage.authToken ? <li><Link to="/profile/">{jwtDecode(localStorage.authToken).name} {jwtDecode(localStorage.authToken).surname}</Link></li> : <li><Link to="/registration/">Registrtion</Link></li>}
+							{jwtDecode(localStorage.authToken).role === 'driver' ? <li><Link to="/orders/">Orders</Link></li> : <li><Link to="/myorders/">My orders</Link></li>}
 							{localStorage.authToken ? <li><Link to="/logout/">Log out</Link></li> : <li><Link to="/auth/">Auth</Link></li>}
 						</ul>
 					</nav>
