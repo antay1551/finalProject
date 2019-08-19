@@ -20,7 +20,7 @@ function promiseReducer(state, action){
         return createStateFromToken(localStorage.authToken)
     }
     if (action.type === 'LOGOUT'){
-        localStorage.authToken = undefined
+        localStorage.authToken = ''
         return createStateFromToken(localStorage.authToken)
     }
     if (action.type === ACTION_TYPES.COORDINATES){

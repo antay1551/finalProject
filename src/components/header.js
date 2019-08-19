@@ -1,6 +1,7 @@
 import React from "react";
 import {Router, Route, Link, Switch, NavLink, Redirect } from 'react-router-dom';
-
+import { connect } from 'react-redux';
+import * as jwtDecode from 'jwt-decode';
 import '../style/startpage.css';
 
 class Header extends React.Component {
@@ -29,10 +30,9 @@ class Header extends React.Component {
 					<nav className="main-nav">
 						<ul className="">
 							<li><Link to="/">Home</Link></li>
-							<li><Link to="/profile/">Profile</Link></li>
 							<li><Link to="/about/">About</Link></li>
-							<li><Link to="/registration/">Registrtion</Link></li>
-							<li><Link to="/auth/">Auth</Link></li>
+							{localStorage.authToken ? <li><Link to="/profile/">{jwtDecode(localStorage.authToken).name} {jwtDecode(localStorage.authToken).surname}</Link></li> : <li><Link to="/registration/">Registrtion</Link></li>}
+							{localStorage.authToken ? <li><Link to="/logout/">Log out</Link></li> : <li><Link to="/auth/">Auth</Link></li>}
 						</ul>
 					</nav>
 					<div className="line"></div>
@@ -42,5 +42,5 @@ class Header extends React.Component {
 		)
 	  }
 }
-
-export default Header;
+//export default connect()(Header);
+export default connect(st => ({token: st.token, name: st.sub && st.sub.name, surname: st.sub && st.sub.surname}))(Header);

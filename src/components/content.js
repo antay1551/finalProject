@@ -10,6 +10,7 @@ import Registration from "./registration"
 import Header from "./header"
 import Footer from "./footer"
 import About from "./about"
+import Logout from "./logout"
 
 let Content = p =>
     <Router history = {createHistory()}>
@@ -20,6 +21,7 @@ let Content = p =>
           <Route path="/profile/" component = { Profile } exact />
           <Route path="/auth/" component = { Auth } exact />
           <Route path="/home/" component = { Home } exact />
+          <Route path="/logout/" component = { Logout } exact />
           <Route path="/registration/" component = { Registration } exact />
           <Footer />
         {/* </Switch> */}
