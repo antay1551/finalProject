@@ -1,21 +1,19 @@
 import React from "react";
 import { GraphQLClient } from 'graphql-request'
 import  { Redirect } from 'react-router-dom'
-		
+import { store } from "../store/reducer";
+
 const gql = new GraphQLClient("/graphql", { headers: {} })
 
-
 class Auth extends React.Component {
+	handleSubmit = this.handleSubmit.bind(this);
 	constructor (props){
 		super(props)
-		this.state = {loader: false, email:"", password:""}
+		this.state = {loader: false, email: "", password: "", token: ""}
 	  }
-	handleSubmit = e => {
+	async handleSubmit(e) {
 		e.preventDefault();
-		console.log(this.state.email);
-		console.log(55555555);
-		console.log(this.state.password);
-        fetch('/users/authenticate', {
+		await fetch('/users/authenticate', {
             method: 'POST',
             headers: {
             'Accept': 'application/json',
@@ -23,13 +21,19 @@ class Auth extends React.Component {
             },
             body: JSON.stringify({email: this.state.email, password: this.state.password}) 
         }).then(res => (console.log(res, res.headers), res.json()))
-			.then(json => localStorage.setItem('authToken', json.token))
-        const originalFetch = fetch;
-        fetch = (url, params={headers:{}}) => { 
-            params.headers.Authorization = "Bearer " + localStorage.getItem('authToken')
-            return originalFetch(url, params)
+			.then(json => this.setState({token: json.token}) )
+		var token = this.state.token;
+		if(await this.state.token !== ""){
+			function actionLogIn (token){
+				console.log(1111111);
+				return {type: 'LOGIN', token};
+			}
+			store.dispatch(actionLogIn(this.state.token));
 		}
-		console.log(localStorage.getItem('authToken'), '===eeeeeeeeeeeeeeeeeeeeeeee');
+		//fetch = (url, params={headers:{}}) => { 
+        //    params.headers.Authorization = "Bearer " + localStorage.getItem('authToken')
+        //    return originalFetch(url, params)
+		//}
 		this.setState({loader:true});
 	}
 	renderRedirect = () => {

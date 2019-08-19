@@ -3,7 +3,7 @@ import {Map, InfoWindow, Marker, GoogleApiWrapper} from 'google-maps-react';
 //import FormFind from "./FormFind"
 import { connect } from 'react-redux';
 import {store} from '../store/reducer';
-//import { stat } from "fs";
+//import { stat } from "fs";git init
 import { GraphQLClient } from 'graphql-request'
 import actionsMaker from '../store/actionCalculate';
 import promiseActionsMaker from '../store/action';
@@ -31,7 +31,7 @@ class Home extends React.Component {
 			var price = 30 + distance*3.5;
 			if (price < 50)
 				price = 50;
-			this.setState({ price });
+			//this.setState({ price });
 			return price;
 		}
 		information = () =>{

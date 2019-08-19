@@ -10,7 +10,7 @@ class Profile extends React.Component {
 	constructor (props){
 		super(props)
 		var decoded = jwt_decode(localStorage.getItem('authToken'));
-		this.state = {loader: false, email:"", password:"", role: 'driver', name:"", surname:"", id: decoded.sub}
+		this.state = {loader: false, email:"", password:"", name:"", surname:"", id: decoded.sub}
 		console.log(11111);
 		console.log(localStorage.getItem('authToken'));
 	  }
@@ -52,10 +52,6 @@ class Profile extends React.Component {
 						<input type='text' value={this.state.email} onChange={evt => this.setState({email: evt.target.value})}/>
 					<label>password</label>
 						<input type='password' value={this.state.password} onChange={evt => this.setState({password: evt.target.value})}/>
-					<select value={this.state.role} onChange={evt => this.setState({role: evt.target.value})}>
-						<option value="driver">driver</option>
-						<option value="passenger">passenger</option>
-					</select>
 			  	<button onClick={this.handleSubmit}>Post...</button>
 			  <hr/>
 			</div>
