@@ -17,10 +17,12 @@ function promiseReducer(state, action){
         return {};
     if (action.type === 'LOGIN'){
         localStorage.authToken = action.token
+        localStorage.role = jwtDecode(action.token).role
         return createStateFromToken(localStorage.authToken)
     }
     if (action.type === 'LOGOUT'){
         localStorage.authToken = ''
+        localStorage.role = ''
         return createStateFromToken(localStorage.authToken)
     }
     if (action.type === ACTION_TYPES.COORDINATES){
