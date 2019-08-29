@@ -4,7 +4,6 @@ import { connect } from 'react-redux';
 import * as jwtDecode from 'jwt-decode';
 import { GraphQLClient } from 'graphql-request';
 import '../style/startpage.css';
-const gql = new GraphQLClient("/graphql", { headers: { "Authorization": "Bearer " + localStorage.getItem('authToken') } })
 
 class Header extends React.Component {
 	constructor(props) {
@@ -13,28 +12,24 @@ class Header extends React.Component {
 	}
 	handleChange = ({ target }) => {
 		this.setState({ status: !this.state.status });
-		console.log(this.state.status);
 		var role = '';
-		console.log('for role: ', this.state.status);
 		if (this.state.status) {
 			role = 'passenger';
-			console.log(this.state.status);
 		} else {
 			role = 'driver';
 		}
+		let gql = new GraphQLClient("/graphql", { headers: { "Authorization": "Bearer " + localStorage.getItem('authToken') } })
 		gql.request(`
 		mutation updateRole($role:String!){
 			updateRole(role: $role){
-				id, role
+				role
 			}
 		}`, { role })
 		localStorage.setItem('role', role);
-		//this.setState({ flag: true });
 	}
 	orders() {
 		if (localStorage.role) {
-			var role = localStorage.role;
-			if (role === 'driver')
+			if (localStorage.role === 'driver')
 				return (<li><Link to="/orders/">Orders</Link></li>);
 			else
 				return (<li><Link to="/myorders/">My orders</Link></li>);
@@ -42,27 +37,17 @@ class Header extends React.Component {
 	}
 
 	loadRole() {
-		if (localStorage.role) {
-			if ((this.state.flag) || (this.state.role !== localStorage.role)) {
-				var role = localStorage.role;
-				console.log(role);
-				if (role === 'driver') {
-					this.setState({ status: true });
-					this.setState({ role });
-					console.log(this.state.status);
-				} else {
-					this.setState({ status: false });
-					console.log(this.state.status);
-					this.setState({ role });
-					console.log('----------------------');
-				}
-				this.setState({ flag: false });
+		if ((this.state.flag) || (this.state.role !== localStorage.role)) {
+			var role = localStorage.role;
+			if (role === 'driver') {
+				this.setState({ status: true });
+				this.setState({ role });
+			} else {
+				this.setState({ status: false });
+				this.setState({ role });
 			}
+			this.setState({ flag: false });
 		}
-		//if(this.state.loadRole)
-		//console.log(this.state.loadRole);
-		console.log('status::::::::::::::');
-		console.log(this.state.status);
 		return (
 			<div class="check">
 				<input id="check" type="checkbox" checked={this.state.status} onClick={this.handleChange} />
@@ -95,5 +80,5 @@ class Header extends React.Component {
 		)
 	}
 }
-//export default connect()(Header);
+
 export default connect(st => ({ token: st.token, name: st.sub && st.sub.name, surname: st.sub && st.sub.surname }))(Header);
