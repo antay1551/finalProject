@@ -26,7 +26,11 @@ let actionsMaker = (name, latLngFrom, latLngTo) => {
               }, 
                 function(response, status) {
                     if(status === 'OK'){
-                      var data = response.rows[0].elements[0];
+                      let data = response.rows[0].elements[0];
+                      data['fromAdress'] = response.originAddresses;
+                      data['toAdress'] = response.destinationAddresses;
+                      console.log('rrrrrrrrrrrrrr');
+                      console.log(response);
                               //store.dispatch(res);
                               dispatch(actionResolved(data))
                     } 

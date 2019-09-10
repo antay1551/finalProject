@@ -27,6 +27,7 @@ class Home extends React.Component {
 		);*/
 	}
 	price = (distance) => {
+		console.log(distance);
 		distance = +distance.substring(0, distance.length - 2);
 		var price = 30 + distance * 3.5;
 		if (price < 50)
@@ -56,11 +57,11 @@ class Home extends React.Component {
 		console.log(this.state.price);
 		let addTrips = promiseActionsMaker('addTrips',
 			gql.request(`
-			  mutation addTrips($price: Float!, $latFrom:Float!, $longFrom:Float!, $latTo:Float!, $longTo:Float!){
-				addTrips(price: $price, latFrom: $latFrom, longFrom: $longFrom, latTo: $latTo, longTo: $longTo){
+			  mutation addTrips($price: Float!, $latFrom:Float!, $longFrom:Float!, $latTo:Float!, $longTo:Float!, $from:String!, $to:String!){
+				addTrips(price: $price, latFrom: $latFrom, longFrom: $longFrom, latTo: $latTo, longTo: $longTo, from: $from, to: $to){
 				  id,
 				}
-			  }`, { price: this.price, latFrom: this.props.latLngFrom.lat, longFrom: this.props.latLngFrom.lng, latTo: this.props.latLngTo.lat, longTo: this.props.latLngTo.lng }
+			  }`, { price: this.price, latFrom: this.props.latLngFrom.lat, longFrom: this.props.latLngFrom.lng, latTo: this.props.latLngTo.lat, longTo: this.props.latLngTo.lng, from: this.props.fromAdress, to: this.props.toAdress }
 			)
 		);
 		store.dispatch(addTrips());
@@ -97,6 +98,7 @@ class Home extends React.Component {
 					}}>
 					{this.props.latLngFrom ? <Marker position={{ lat: this.props.latLngFrom.lat, lng: this.props.latLngFrom.lng }} /> : <p>not yet</p>}
 					{this.props.latLngTo ? <Marker position={{ lat: this.props.latLngTo.lat, lng: this.props.latLngTo.lng }} /> : <p>not yet</p>}
+					{this.props.fromAdress ? console.log('propppps',this.props.fromAdress) : console.log('fromAdress noo')}
 					{/* <Marker  position={{ lat: this.state.latitude, lng: this.state.longitude }}/> */}
 				</Map>
 			</div>
@@ -109,10 +111,7 @@ const mapStateToProps = state => {
 		info: state
 	};
 };
-//export default connect(st => ({latLngFrom: st.latLngFrom && st.latLngTo && st.latLngFrom.payload.latLng, latLngTo: st.latLngTo && st.latLngFrom && st.latLngTo.payload.latLng, distance: st.DistanceDuration && st.DistanceDuration.payload.distance, duration: st.DistanceDuration && st.DistanceDuration.payload.duration}))(GoogleApiWrapper({
 
-//export default connect(st => ({latLngFrom: st.latLngFrom && st.latLngTo && st.latLngFrom.payload.latLng, latLngTo: st.latLngTo && st.latLngFrom && st.latLngTo.payload.latLng }))(Home);
-
-export default connect(st => ({ latLngFrom: st.latLngFrom && st.latLngTo && st.latLngFrom.payload.latLng, latLngTo: st.latLngTo && st.latLngFrom && st.latLngTo.payload.latLng, distance: st.distanceDuration && st.distanceDuration.status === 'RESOLVED' && st.distanceDuration.payload.distance, duration: st.distanceDuration && st.distanceDuration.status === 'RESOLVED' && st.distanceDuration.payload.duration }), { onPost: actionsMaker })(GoogleApiWrapper({
+export default connect(st => ({ latLngFrom: st.latLngFrom && st.latLngTo && st.latLngFrom.payload.latLng, latLngTo: st.latLngTo && st.latLngFrom && st.latLngTo.payload.latLng, distance: st.distanceDuration && st.distanceDuration.status === 'RESOLVED' && st.distanceDuration.payload.distance, duration: st.distanceDuration && st.distanceDuration.status === 'RESOLVED' && st.distanceDuration.payload.duration, fromAdress: st.distanceDuration && st.distanceDuration.status === 'RESOLVED' && st.distanceDuration.payload.fromAdress[0], toAdress: st.distanceDuration && st.distanceDuration.status === 'RESOLVED' && st.distanceDuration.payload.toAdress[0] }), { onPost: actionsMaker })(GoogleApiWrapper({
 	apiKey: ("AIzaSyBhZNdBlfHjvqdPZ4z5Uk3hGeyZYCaXzZY")
 })(Home))
