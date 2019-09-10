@@ -12,6 +12,7 @@ import About from "./about"
 import Logout from "./logout"
 import Orders from "./orders"
 import Driver from "./driver"
+import MyOrders from "./myOrders"
 
 
 let Content = p =>
@@ -20,6 +21,7 @@ let Content = p =>
           <Header />
           <Route path="/" component = { StartPage } exact />
           <Route path="/orders/" component = { Orders } exact />
+          <Route path="/myorders/" component = { MyOrders } exact />
           <Route path="/about/" component = { About } exact />
           <Route path="/profile/" component = { Profile } exact />
           <Route path="/auth/" component = { Auth } exact />

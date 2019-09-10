@@ -18,41 +18,12 @@ const columns = [
   { key: "take", name: "Take", editable: true },
 ];
 
-class Orders extends React.Component {
+class MyOrders extends React.Component {
   constructor(props) {
     super(props)
-    this.state = { loader: false, availableTrip: '', rows: '', endpoint: ':5000', update: false };
-    //let socket = socketIOClient('http://localhost:5000', {
-    //  query: {
-    //    Token: localStorage.getItem('authToken'),
-    //  },
-    //});
-    // If you refresh your token, update it upon reconnection attempt
-    // socket.on('get_trips', () => {
-    //       this.socket.io.opts.query = {
-    //         token: localStorage.getItem('authToken')
-    //       };
-    //     });
-    //let socket = socketIOClient(this.state.endpoint);
-    //socket.emit("msg");
-    let timerId = setInterval(async () => {
-      let availableTrip = await gql.request(`query getAvailableTrip {
-      getAvailableTrip{
-        id, price, lat_from, lat_to, long_to, long_from, from, to
-        }
-      }
-    `); await console.log('okkkk', availableTrip)
-        await this.setState({ availableTrip: availableTrip.getAvailableTrip });
-        let row = await [];
-        for (let i = 0; i < availableTrip.getAvailableTrip.length; i++) {
-          let id = availableTrip.getAvailableTrip[i].id;
-          row[i] = await { from: availableTrip.getAvailableTrip[i].from, to: availableTrip.getAvailableTrip[i].to, price: availableTrip.getAvailableTrip[i].price, status: 'search', take: <Link to={`/driver/${id}`}>take</Link> }
-        }
-        await this.setState({ rows: row });
-        await this.setState({ update: true });
-    }, 5000);
+    this.state = { loader: false, availableTrip: '', rows: '', update: false };
   }
-  async componentDidMount() {
+  /*async componentDidMount() {
     let availableTrip = await gql.request(`query getAvailableTrip {
               getAvailableTrip{
                 id, price, lat_from, lat_to, long_to, long_from, from, to
@@ -71,7 +42,7 @@ class Orders extends React.Component {
     //<Link to="/driver/" params={{ id: 111 }}>take it</Link>
     await this.setState({ rows: row });
     await this.setState({ status: true });
-  }
+  }*/
 
   onGridRowsUpdated = ({ fromRow, toRow, updated }) => {
     this.setState(state => {
@@ -86,7 +57,7 @@ class Orders extends React.Component {
   render() {
     return (
       <div>
-        <h1>free Order </h1>
+        <h1>my orders </h1>
         {this.state.status ? <ReactDataGrid
           columns={columns}
           rowGetter={i => this.state.rows[i]}
@@ -99,4 +70,4 @@ class Orders extends React.Component {
   }
 }
 
-export default Orders;
+export default MyOrders;
