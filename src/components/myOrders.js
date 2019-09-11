@@ -15,34 +15,29 @@ const columns = [
   { key: "to", name: "To", editable: true },
   { key: "price", name: "Price", editable: true },
   { key: "status", name: "Status", editable: true },
-  { key: "take", name: "Take", editable: true },
+  { key: "driver", name: "Driver", editable: true },
 ];
 
 class MyOrders extends React.Component {
   constructor(props) {
     super(props)
-    this.state = { loader: false, availableTrip: '', rows: '', update: false };
+    this.state = { loader: false, myTrips: '', rows: '', update: false, status: false };
   }
-  /*async componentDidMount() {
-    let availableTrip = await gql.request(`query getAvailableTrip {
-              getAvailableTrip{
-                id, price, lat_from, lat_to, long_to, long_from, from, to
+  async componentDidMount() {
+    let myTrips = await gql.request(`query myTrips {
+            myTrips{
+                id, price, from, to, id_driver, status
                 }
             }
             `)
-    await console.log('111', availableTrip);
-    await this.setState({ availableTrip: availableTrip.getAvailableTrip });
+    await this.setState({ myTrips: myTrips.myTrips });
     var row = [];
-    for (let i = 0; i < availableTrip.getAvailableTrip.length; i++) {
-      //<Link to={/corpus/${corpusId}/tag}>
-      let id = availableTrip.getAvailableTrip[i].id;
-      row[i] = await { from: availableTrip.getAvailableTrip[i].from, to: availableTrip.getAvailableTrip[i].to, price: availableTrip.getAvailableTrip[i].price, status: 'search', take: <Link to={`/driver/${id}`}>take</Link> }
+    for (let i = 0; i < this.state.myTrips.length; i++) {
+      row[i] = await { from: this.state.myTrips[i].from, to: this.state.myTrips[i].to, price: this.state.myTrips[i].price, status: this.state.myTrips[i].status, driver: this.state.myTrips[i].id_driver }
     }
-    //
-    //<Link to="/driver/" params={{ id: 111 }}>take it</Link>
     await this.setState({ rows: row });
     await this.setState({ status: true });
-  }*/
+  }
 
   onGridRowsUpdated = ({ fromRow, toRow, updated }) => {
     this.setState(state => {
