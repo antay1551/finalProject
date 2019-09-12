@@ -14,17 +14,37 @@ const gql = new GraphQLClient("/graphql", { headers: { "Authorization": "Bearer 
 class Home extends React.Component {
 	constructor(props) {
 		super(props)
-		this.state = { latitude: 0, longitude: 0, distanceDuration: '', price: 0 }
+		//this.state = { latitude: 0, longitude: 0, distanceDuration: '', price: 0 }
+		this.state = { latitude: 0, longitude: 0, distanceDuration: '', price: 0, id_driver: false, infoTrip: '', lastTrip: '' }
+		this.toUpdate = true;
 		//this.calculete = this.calculete.bind(this);
 	}
 	componentDidMount() {
-		/*this.watchId = navigator.geolocation.watchPosition(
-			(position) => {
-				this.setState({
-					latitude: position.coords.latitude, longitude: position.coords.longitude
-				});
+		let timerId = setInterval(async () => {
+			let infoTrip = await gql.request(`query getInfoTrip {
+			getInfoTrip{
+			  	id_driver
+			  }
 			}
-		);*/
+		  `); await console.log(infoTrip);
+			 this.infoTrip = infoTrip.getInfoTrip.length;
+			 this.id_driver = infoTrip.getInfoTrip[infoTrip.getInfoTrip.length - 1].id_driver;
+
+		 	 if (await this.toUpdate) {
+				this.toUpdate = !this.toUpdate;
+				this.countTrip = infoTrip.getInfoTrip.length;
+			}
+			await console.log('ressss');
+		
+			await console.log(this.countTrip);
+			await console.log(this.infoTrip);
+	
+			if (await (this.id_driver !== null) && (this.countTrip != this.infoTrip)) {
+				await console.log(555);
+			}
+			//await this.setState({ id_driver: true });
+		}, 1000);
+
 	}
 	price = (distance) => {
 		console.log(distance);
@@ -32,7 +52,7 @@ class Home extends React.Component {
 		var price = 30 + distance * 3.5;
 		if (price < 50)
 			price = 50;
-		this.price = price; 
+		this.price = price;
 		//this.setState({ price });
 		return price;
 	}
@@ -98,7 +118,7 @@ class Home extends React.Component {
 					}}>
 					{this.props.latLngFrom ? <Marker position={{ lat: this.props.latLngFrom.lat, lng: this.props.latLngFrom.lng }} /> : <p>not yet</p>}
 					{this.props.latLngTo ? <Marker position={{ lat: this.props.latLngTo.lat, lng: this.props.latLngTo.lng }} /> : <p>not yet</p>}
-					{this.props.fromAdress ? console.log('propppps',this.props.fromAdress) : console.log('fromAdress noo')}
+					{this.props.fromAdress ? console.log('propppps', this.props.fromAdress) : console.log('fromAdress noo')}
 					{/* <Marker  position={{ lat: this.state.latitude, lng: this.state.longitude }}/> */}
 				</Map>
 			</div>
