@@ -1,6 +1,7 @@
 import React from "react";
 import { GraphQLClient } from 'graphql-request';
 import { Map, InfoWindow, Marker, GoogleApiWrapper } from 'google-maps-react';
+import promiseActionsMaker from '../store/action';
 
 const gql = new GraphQLClient("/graphql", { headers: { "Authorization": "Bearer " + localStorage.getItem('authToken') } })
 
@@ -27,9 +28,46 @@ class Driver extends React.Component {
 		await this.setState({ coordinateFrom: coordinateFrom.getUserCoordinate[0] });
 		await this.setState({ loader: true });
 	}
+	handleSubmit = e => {
+		e.preventDefault();
+
+		let driverInLocation = promiseActionsMaker('driverInLocation',
+			gql.request(`
+			  mutation driverInLocation($idTrip: Int!){
+				driverInLocation(idTrip: $idTrip){
+				  id,
+				}
+			  }`, { idTrip: this.state.id }
+			)
+		);
+	}
+	handleSubmitFinishOrder = e => {
+		e.preventDefault();
+		let driverFinishTrip = promiseActionsMaker('driverFinishTrip',
+			gql.request(`
+			  mutation driverFinishTrip($idTrip: Int!){
+				driverFinishTrip(idTrip: $idTrip){
+				  id,
+				}
+			  }`, { idTrip: +this.state.id }
+			)
+		);
+	}
+	driverInLocation = () => {
+		return (
+			<div>
+				<button onClick={this.handleSubmit}>InLocation</button>
+				<button onClick={this.handleSubmitFinishOrder}>Finish order</button>
+			</div>
+
+		);
+	}
 	render() {
 		return (
 			<div>
+				{this.driverInLocation()}
+				<hr/>
+				<br/>
 				{this.state.loader ? <Map google={this.props.google} zoom={14}
 					initialCenter={{
 						lat: 49.9935,

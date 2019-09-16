@@ -7,6 +7,7 @@ import { store } from '../store/reducer';
 import { GraphQLClient } from 'graphql-request'
 import actionsMaker from '../store/actionCalculate';
 import promiseActionsMaker from '../store/action';
+import { tsThisType } from "@babel/types";
 
 const gql = new GraphQLClient("/graphql", { headers: { "Authorization": "Bearer " + localStorage.getItem('authToken') } })
 
@@ -15,7 +16,7 @@ class Home extends React.Component {
 	constructor(props) {
 		super(props)
 		//this.state = { latitude: 0, longitude: 0, distanceDuration: '', price: 0 }
-		this.state = { latitude: 0, longitude: 0, distanceDuration: '', price: 0, id_driver: false, infoTrip: '', lastTrip: '' }
+		this.state = { latitude: 0, longitude: 0, distanceDuration: '', price: 0, id_driver: '', infoTrip: '', lastTrip: '', getDriver: true }
 		this.toUpdate = true;
 		//this.calculete = this.calculete.bind(this);
 	}
@@ -40,10 +41,37 @@ class Home extends React.Component {
 			await console.log(this.infoTrip);
 	
 			if (await (this.id_driver !== null) && (this.countTrip != this.infoTrip)) {
-				await console.log(555);
+					let coordinateDriver = await gql.request(`mutation getDriverCoordinate($idDriver:Int!){
+						getDriverCoordinate(idDriver: $idDriver){
+							lat, long
+						}
+					}`
+				, {idDriver: +this.id_driver});
+				let coordinateTrip = await gql.request(`query getTripsCoordinate($idDriver:Int!){
+					getTripsCoordinate(idDriver: $idDriver){
+						lat_from, long_from, lat_to, long_to, status 
+					}
+				}`
+			, {idDriver: +this.id_driver});
+			await console.log('ressssss', coordinateTrip);
+			await console.log('status', coordinateTrip.getTripsCoordinate[coordinateTrip.getTripsCoordinate.length -1].status);
+			//await console.log(coordinateTrip);
+				this.latFrom = await coordinateTrip.getTripsCoordinate[coordinateTrip.getTripsCoordinate.length -1].lat_from;
+				this.latTo = await coordinateTrip.getTripsCoordinate[coordinateTrip.getTripsCoordinate.length -1].lat_to; 
+				this.longFrom = await coordinateTrip.getTripsCoordinate[coordinateTrip.getTripsCoordinate.length -1].long_from;
+				this.longTo = await coordinateTrip.getTripsCoordinate[coordinateTrip.getTripsCoordinate.length -1].long_to;
+
+				this.latDriver = coordinateDriver.getDriverCoordinate.lat;
+				this.lngDriver = coordinateDriver.getDriverCoordinate.long;
+				if(await coordinateTrip.getTripsCoordinate[coordinateTrip.getTripsCoordinate.length -1].status == 'wait') {
+					this.setState({ driverWait: true });
+				}
+				
+				await this.setState({ getDriver: false });
+				await this.setState({ id_driver: this.id_driver });
 			}
-			//await this.setState({ id_driver: true });
-		}, 1000);
+			
+		}, 7000);
 
 	}
 	price = (distance) => {
@@ -106,19 +134,24 @@ class Home extends React.Component {
 		return (
 			<div>
 				<div>
-					{this.props.distance && this.props.duration ? this.information() : console.log('no yet')}
-					{this.props.distance && this.props.duration ? this.newButton() : console.log('no yet')}
+					{this.props.distance && this.props.duration && this.state.getDriver ? this.information() : console.log('no yet')}
+					{this.props.distance && this.props.duration && this.state.getDriver ? this.newButton() : console.log('no yet')}
 				</div>
-
-				{this.props.latLngFrom ? this.newButtonSend() : <p>not yet</p>}
+				{this.state.getDriver?<p>no driver</p>:<p>get driver</p>}
+				{this.state.driverWait?<p>driver wait you</p>:<p></p>}
+				{this.props.latLngFrom && this.state.getDriver ? this.newButtonSend() : <p>not yet</p>}
 				<Map google={this.props.google} zoom={14}
 					initialCenter={{
 						lat: 49.9935,
 						lng: 36.2304
 					}}>
-					{this.props.latLngFrom ? <Marker position={{ lat: this.props.latLngFrom.lat, lng: this.props.latLngFrom.lng }} /> : <p>not yet</p>}
-					{this.props.latLngTo ? <Marker position={{ lat: this.props.latLngTo.lat, lng: this.props.latLngTo.lng }} /> : <p>not yet</p>}
-					{this.props.fromAdress ? console.log('propppps', this.props.fromAdress) : console.log('fromAdress noo')}
+					{this.state.getDriver?<p>no driver</p>:<Marker  label="Driver" position={{ lat: this.latDriver, lng: this.lngDriver }} />}
+					{this.state.getDriver?<p>no driver</p>:<Marker  label="A" position={{ lat: this.latFrom, lng: this.longFrom }} />}
+					{this.state.getDriver?<p>no driver</p>:<Marker  label="B" position={{ lat: this.latTo, lng: this.longTo }} />}
+
+					{this.props.latLngFrom && this.state.getDriver ? <Marker position={{ lat: this.props.latLngFrom.lat, lng: this.props.latLngFrom.lng }} /> : <p>not yet</p>}
+					{this.props.latLngTo && this.state.getDriver ? <Marker position={{ lat: this.props.latLngTo.lat, lng: this.props.latLngTo.lng }} /> : <p>not yet</p>}
+					{this.props.fromAdress && this.state.getDriver ? console.log('propppps', this.props.fromAdress) : console.log('fromAdress noo')}
 					{/* <Marker  position={{ lat: this.state.latitude, lng: this.state.longitude }}/> */}
 				</Map>
 			</div>
