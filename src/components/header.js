@@ -3,6 +3,7 @@ import { Router, Route, Link, Switch, NavLink, Redirect } from 'react-router-dom
 import { connect } from 'react-redux';
 import * as jwtDecode from 'jwt-decode';
 import { GraphQLClient } from 'graphql-request';
+import '../style/input.css';
 import '../style/startpage.css';
 
 class Header extends React.Component {
@@ -30,9 +31,19 @@ class Header extends React.Component {
 	orders() {
 		if (localStorage.role) {
 			if (localStorage.role === 'driver')
-				return (<li><Link to="/orders/">Orders</Link></li>);
+				return (
+					<span className="right">
+						<span className="contact">
+							<a href="/orders/">Orders</a>
+						</span>
+					</span>);
 			else
-				return (<li><Link to="/myorders/">My orders</Link></li>);
+				return (
+					<span className="right">
+						<span className="contact">
+							<a href="/myorders/">My orders</a>
+						</span>
+					</span>);
 		}
 	}
 
@@ -58,25 +69,27 @@ class Header extends React.Component {
 	render() {
 		return (
 			<div className="wrapper">
-				<div className="header">
-					<strong className="logo">
-						<Link to="/"><img className="logo" src="https://logobaker.ru/media/uploads/userapi/logos/6437/400_300_4906-slon.jpg" /></Link>
-					</strong>
-
+				<header>
+					<Link to="/"><img className="logo" src="https://images-na.ssl-images-amazon.com/images/I/41lQlHQdj5L._SX450_.jpg" /></Link>
 					{localStorage.role ? this.loadRole() : console.log()}
-					<nav className="main-nav">
-						<ul className="">
-							<li><Link to="/">Home</Link></li>
-							<li><Link to="/about/">About</Link></li>
-							{localStorage.authToken ? <li><Link to="/profile/">{jwtDecode(localStorage.authToken).name} {jwtDecode(localStorage.authToken).surname}</Link></li> : <li><Link to="/registration/">Registrtion</Link></li>}
-							{this.orders()}
-							{localStorage.authToken ? <li><Link to="/logout/">Log out</Link></li> : <li><Link to="/auth/">Auth</Link></li>}
-						</ul>
-					</nav>
-					<div className="line"></div>
-				</div>
-				<hr />
+					{this.orders()}
+					<span className="right">
+						<span className="contact">
+							<a href="/" title="Home">Home</a>
+						</span>
+						<span className="contact">
+							<a href="/about/" title="About">About</a>
+						</span>
+						<span className="contact">
+							{localStorage.authToken ? <a href="/profile/">{jwtDecode(localStorage.authToken).name} {jwtDecode(localStorage.authToken).surname}</a> : <a href="/registration/">Registrtion</a>}
+						</span>
+						<span className="contact">
+							{localStorage.authToken ? <a href="/logout/">Log out</a> : <a href="/auth/" title="Auth">Auth</a>}
+						</span>
+					</span>
+				</header>
 			</div>
+
 		)
 	}
 }

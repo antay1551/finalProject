@@ -43,7 +43,6 @@ class WatchPosition extends React.Component {
 	  render(){
 		return (
 			<div>
-                okkkkkkkk
 			</div>
 		)
 	  }

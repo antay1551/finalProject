@@ -1,17 +1,17 @@
 import React from "react";
 
 class Footer extends React.Component {
-	constructor (props){
+	constructor(props) {
 		super(props)
-	  }
-	  render(){
+	}
+	render() {
 		return (
 			<div>
-                <hr/>
-                <h1>some Footer </h1>
+				<footer>
+				</footer>
 			</div>
 		)
-	  }
+	}
 }
 
 export default Footer;

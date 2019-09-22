@@ -14,7 +14,21 @@ class Profile extends React.Component {
 		console.log(11111);
 		console.log(localStorage.getItem('authToken'));
 	}
-
+	async componentDidMount() {
+		let userInfo = await gql.request(`
+				query getUser{
+					getUser{
+					name, surname, email, password
+					}
+			  }`
+		);
+		console.log(await userInfo);
+		await this.setState({ name: userInfo.getUser[0].name });
+		await this.setState({ surname: userInfo.getUser[0].surname });
+		await this.setState({ email: userInfo.getUser[0].email });
+		await this.setState({ password: userInfo.getUser[0].password });
+		await this.setState({ loader: true });
+	}
 	handleSubmit = e => {
 		e.preventDefault();
 		console.log(this.state.name);
@@ -34,18 +48,22 @@ class Profile extends React.Component {
 	render() {
 		return (
 			<div>
-				<hr />
-				<h3>form to change profile</h3>
-				<label>name</label>
-				<input type='text' value={this.state.name} onChange={evt => this.setState({ name: evt.target.value })} />
-				<label>surname</label>
-				<input type='text' value={this.state.surname} onChange={evt => this.setState({ surname: evt.target.value })} />
-				<label>email</label>
-				<input type='text' value={this.state.email} onChange={evt => this.setState({ email: evt.target.value })} />
-				<label>password</label>
-				<input type='password' value={this.state.password} onChange={evt => this.setState({ password: evt.target.value })} />
-				<button onClick={this.handleSubmit}>Post...</button>
-				<hr />
+				<div id="wrapper">
+					<div id="articles">
+						<div id="form-registration">
+							<h3>Your profile</h3>
+							<label>name</label>
+							<input type='text' value={this.state.name} onChange={evt => this.setState({ name: evt.target.value })} />
+							<label>surname</label>
+							<input type='text' value={this.state.surname} onChange={evt => this.setState({ surname: evt.target.value })} />
+							<label>email</label>
+							<input type='text' value={this.state.email} onChange={evt => this.setState({ email: evt.target.value })} />
+							<label>password</label>
+							<input type='password' value={this.state.password} onChange={evt => this.setState({ password: evt.target.value })} />
+							<button onClick={this.handleSubmit} id="send">Update</button>
+						</div>
+					</div>
+				</div>
 			</div>
 		)
 	}

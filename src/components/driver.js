@@ -73,7 +73,7 @@ class Driver extends React.Component {
 						lat: 49.9935,
 						lng: 36.2304
 					}}>
-					{this.state.loader ? <Marker label="A" position={{ lat: this.state.coordinateFrom.lat, lng: this.state.coordinateFrom.long }} /> : <p>not yet</p>}
+					{this.state.loader ? <Marker label="A" position={{ lat: this.state.coordinateFrom.lat, lng: this.state.coordinateFrom.long }} /> : <p></p>}
 					{this.state.loader ? <Marker label="B" position={{ lat: this.state.coordinateTo.lat_from, lng: this.state.coordinateTo.long_from }} /> : console.log(99999999999999)}
 				</Map> : console.log(111)}
 			</div>

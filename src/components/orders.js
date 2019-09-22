@@ -85,8 +85,10 @@ class Orders extends React.Component {
 
   render() {
     return (
-      <div>
-        <h1>free Order </h1>
+      <div className="free-order">
+        <div className="free-order-title">
+          <h3>Free orders</h3>
+        </div>
         {this.state.status ? <ReactDataGrid
           columns={columns}
           rowGetter={i => this.state.rows[i]}

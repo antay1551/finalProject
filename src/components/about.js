@@ -1,16 +1,37 @@
 import React from "react";
 
 class About extends React.Component {
-	constructor (props){
+	constructor(props) {
 		super(props)
-	  }
-	  render(){
+	}
+	render() {
 		return (
-			<div>
-                <h1>About page </h1>
+			<div id="wrapper">
+				<div id="articles">
+					<div id="about">
+						<p>some text some text some text some text some text some text some text some text some text </p>
+						<p>some text some text some text some text some text some text some text some text some text </p>
+						<p>some text some text some text some text some text some text some text some text some text </p>
+						<p>some text some text some text some text some text some text some text some text some text </p>
+						<p>some text some text some text some text some text some text some text some text some text </p>
+						<p>some text some text some text some text some text some text some text some text some text </p>
+						<p>some text some text some text some text some text some text some text some text some text </p>
+						<p>some text some text some text some text some text some text some text some text some text </p>
+						<p>some text some text some text some text some text some text some text some text some text </p>
+						<p>some text some text some text some text some text some text some text some text some text </p>
+					</div>
+					<div id="columRight">
+						<p>some text some text some text some text some text some text some text some text some text </p>
+						<p>some text some text some text some text some text some text some text some text some text </p>
+						<p>some text some text some text some text some text some text some text some text some text </p>
+						<p>some text some text some text some text some text some text some text some text some text </p>
+						<p>some text some text some text some text some text some text some text some text some text </p>
+						<p>some text some text some text some text some text some text some text some text some text </p>
+					</div>
+				</div>
 			</div>
 		)
-	  }
+	}
 }
 
 export default About;
