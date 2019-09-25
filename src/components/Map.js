@@ -17,7 +17,7 @@ class Home extends React.Component {
 	constructor(props) {
 		super(props)
 		//this.state = { latitude: 0, longitude: 0, distanceDuration: '', price: 0 }
-		this.state = { latitude: 0, longitude: 0, distanceDuration: '', price: 0, id_driver: '', infoTrip: '', lastTrip: '', getDriver: true }
+		this.state = { latitude: 0, longitude: 0, distanceDuration: '', price: 0, id_driver: '', infoTrip: '', lastTrip: '', getDriver: true, driverFinish: false }
 		this.toUpdate = true;
 		//this.calculete = this.calculete.bind(this);
 	}
@@ -67,6 +67,9 @@ class Home extends React.Component {
 				if (await coordinateTrip.getTripsCoordinate[coordinateTrip.getTripsCoordinate.length - 1].status == 'wait') {
 					this.setState({ driverWait: true });
 				}
+				if (await coordinateTrip.getTripsCoordinate[coordinateTrip.getTripsCoordinate.length - 1].status == 'finish') {
+					this.setState({ driverFinish: true });
+				}
 
 				await this.setState({ getDriver: false });
 				await this.setState({ id_driver: this.id_driver });
@@ -87,10 +90,10 @@ class Home extends React.Component {
 	}
 	information = () => {
 		return (
-			<div>
-				distance: {this.props.distance ? this.props.distance.text : <h3>esche rano</h3>}
-				time: {this.props.duration ? this.props.duration.text : <h3>esche rano</h3>}
-				price: {this.props.distance ? this.price(this.props.distance.text) : <h3>esche rano</h3>}
+			<div id="distance-duration-time">
+				<p>Distance: {this.props.distance ? this.props.distance.text : <p></p>} </p>
+				<p>Time: {this.props.duration ? this.props.duration.text : <p>esche rano</p>}</p>
+				<p>Price: {this.props.distance ? this.price(this.props.distance.text) : <p>esche rano</p>}</p>
 			</div>
 		);
 	}
@@ -117,15 +120,15 @@ class Home extends React.Component {
 	}
 	newButton = () => {
 		return (
-			<div>
-				<button onClick={this.handleSubmit} id="send" >Find cars</button>
+			<div id="distance-duration">
+				<button onClick={this.handleSubmit}  id="search-input-button"  >Find cars</button>
 			</div>
 
 		);
 	}
 	newButtonSend = () => {
 		return (
-			<div className="search-input">
+			<div id="distance-duration">
 				<button onClick={() => this.props.onPost('distanceDuration', this.props.latLngFrom, this.props.latLngTo)} id="search-input-button" >Send</button>
 			</div>
 		);
@@ -138,9 +141,10 @@ class Home extends React.Component {
 					{this.props.distance && this.props.duration && this.state.getDriver ? this.information() : console.log('')}
 					{this.props.distance && this.props.duration && this.state.getDriver ? this.newButton() : console.log('')}
 				</div>
-				{this.state.getDriver ? <p></p> : <p>driver take Your trip</p>}
-				{this.state.driverWait ? <p>driver wait you</p> : <p></p>}
-				{this.props.latLngFrom && this.props.latLngFrom ? this.newButtonSend() : <p></p>}
+				{this.state.getDriver ? console.log('') : <div id="distance-duration-time"><p>driver take Your trip</p></div>}
+				{this.state.driverWait && !this.state.driverFinish ? <div id="distance-duration-time"><p>driver wait you</p></div> : console.log('')}
+				{this.state.driverFinish ? <div id="distance-duration-time"><p>Trip is finish.Pay driver</p></div> : console.log('')}
+				{this.props.latLngFrom && this.props.latLngFrom && !this.props.duration ? this.newButtonSend() : console.log('')}
 				<div id="map">
 					<Map google={this.props.google} zoom={14}
 						initialCenter={{
@@ -151,8 +155,8 @@ class Home extends React.Component {
 						{this.state.getDriver ? <p>no driver</p> : <Marker label="A" position={{ lat: this.latFrom, lng: this.longFrom }} />}
 						{this.state.getDriver ? <p>no driver</p> : <Marker label="B" position={{ lat: this.latTo, lng: this.longTo }} />}
 
-						{this.props.latLngFrom && this.state.getDriver ? <Marker position={{ lat: this.props.latLngFrom.lat, lng: this.props.latLngFrom.lng }} /> : <p></p>}
-						{this.props.latLngTo && this.state.getDriver ? <Marker position={{ lat: this.props.latLngTo.lat, lng: this.props.latLngTo.lng }} /> : <p></p>}
+						{this.props.latLngFrom && this.state.getDriver ? <Marker label="A" position={{ lat: this.props.latLngFrom.lat, lng: this.props.latLngFrom.lng }} /> : console.log('')}
+						{this.props.latLngTo && this.state.getDriver ? <Marker label="B" position={{ lat: this.props.latLngTo.lat, lng: this.props.latLngTo.lng }} /> : console.log('')}
 						{this.props.fromAdress && this.state.getDriver ? console.log('propppps', this.props.fromAdress) : console.log('fromAdress noo')}
 						{/* <Marker  position={{ lat: this.state.latitude, lng: this.state.longitude }}/> */}
 					</Map>

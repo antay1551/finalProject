@@ -33,7 +33,7 @@ class MyOrders extends React.Component {
     await this.setState({ myTrips: myTrips.myTrips });
     var row = [];
     for (let i = 0; i < this.state.myTrips.length; i++) {
-      row[i] = await { from: this.state.myTrips[i].from, to: this.state.myTrips[i].to, price: this.state.myTrips[i].price, status: this.state.myTrips[i].status, driver: this.state.myTrips[i].id_driver }
+      row[i] = await { from: this.state.myTrips[i].from, to: this.state.myTrips[i].to, price: this.state.myTrips[i].price, status: this.state.myTrips[i].status, driver: <Link to={`/driverProfile/${this.state.myTrips[i].id_driver}`}>show driver profile</Link> }
     }
     await this.setState({ rows: row });
     await this.setState({ status: true });
@@ -51,8 +51,8 @@ class MyOrders extends React.Component {
 
   render() {
     return (
-      <div>
-        <h1>my orders </h1>
+      <div className="free-order">
+        <h3>My orders: </h3>
         {this.state.status ? <ReactDataGrid
           columns={columns}
           rowGetter={i => this.state.rows[i]}

@@ -13,7 +13,7 @@ import Logout from "./logout"
 import Orders from "./orders"
 import Driver from "./driver"
 import MyOrders from "./myOrders"
-
+import DriverProfile from "./driverProfile"
 
 let Content = p =>
     <Router history = {createHistory()}>
@@ -26,6 +26,7 @@ let Content = p =>
           <Route path="/profile/" component = { Profile } exact />
           <Route path="/auth/" component = { Auth } exact />
           <Route path="/driver/:id" component = { Driver } exact />
+          <Route path="/driverProfile/:id" component = { DriverProfile } exact />
           <Route path="/home/" component = { Home } exact />
           <Route path="/logout/" component = { Logout } exact />
           <Route path="/registration/" component = { Registration } exact />

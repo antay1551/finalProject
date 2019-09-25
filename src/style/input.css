@@ -134,11 +134,13 @@ header img {
 	margin-right: 100px;
 }
 .search-input {
-    display: flex;
-    justify-content: flex-start;
+    /*display: flex;
+	justify-content:;*/
+	text-align: center;
+	margin-top: 15px;
 }
 #search-input-button{
-	float: left;
+	float: center;
 	padding: 10px;
 	background-color:#f37a7a;
 	cursor: pointer;
@@ -158,4 +160,37 @@ header img {
 #free-order-title{
 	text-align: center;
 	float: left;
+}
+#distance {
+	color: #8b9ff5;
+}
+#distance-duration{
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+#distance-duration-time {
+	color: #8b9ff5;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+
+}
+#search-input-button-location{
+	float: center;
+	padding: 10px;
+	background-color:#f37a7a;
+	cursor: pointer;
+	border-radius: 5px;
+	margin-top: 5px;
+	font-size: 1.5em;
+	color:#fff;
+	width: 250px;
+	height: 50px;
+}
+#search-input-button-location:hover{
+	background-color:#bdf37a;
+}
+#search {
+	color: #f37a7a;
 }

@@ -9,23 +9,32 @@ class Registration extends React.Component {
 		this.state = { loader: false, email: "", password: "", name: "", surname: "", phone: "" }
 	}
 	handleSubmit = e => {
-		e.preventDefault();
-		console.log(this.state.email);
-		console.log(this.state.password);
-		console.log(this.state.name);
-		gql.request(`
-		 	mutation createUser($email:String!,$password: String!, $name: String!, $surname: String!, $phone: String!){
-		 		createUser(email: $email,password: $password, name: $name, surname: $surname, phone: $phone){
-		 			name, email
-		 		}
-		 	}`
-			, { email: this.state.email, password: this.state.password, name: this.state.name, surname: this.state.surname, phone: this.state.phone })
-		this.setState({ name: '' })
-		this.setState({ surname: '' })
-		this.setState({ phone: '' })
-		this.setState({ email: '' })
-		this.setState({ password: '' })
-		this.setState({ password: '' })
+		var mailformat = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+		if(this.state.email.match(mailformat))
+		{
+			e.preventDefault();
+			console.log(this.state.email);
+			console.log(this.state.password);
+			console.log(this.state.name);
+			gql.request(`
+				 mutation createUser($email:String!,$password: String!, $name: String!, $surname: String!, $phone: String!){
+					 createUser(email: $email,password: $password, name: $name, surname: $surname, phone: $phone){
+						 name, email
+					 }
+				 }`
+				, { email: this.state.email, password: this.state.password, name: this.state.name, surname: this.state.surname, phone: this.state.phone })
+			this.setState({ name: '' })
+			this.setState({ surname: '' })
+			this.setState({ phone: '' })
+			this.setState({ email: '' })
+			this.setState({ password: '' })
+			this.setState({ password: '' })
+		}
+		else
+		{
+			alert("You have entered an invalid email address!");
+		}
+
 	}
 	render() {
 		return (
@@ -38,7 +47,7 @@ class Registration extends React.Component {
 							<label>surname</label>
 							<input type='text' value={this.state.surname} placeholder="Your surname" onChange={evt => this.setState({ surname: evt.target.value })} />
 							<label>phone</label>
-							<input type='text' value={this.state.phone} placeholder="Your phone" onChange={evt => this.setState({ phone: evt.target.value })} />
+							<input type='email' value={this.state.phone} placeholder="Your phone" onChange={evt => this.setState({ phone: evt.target.value })} />
 							<label>email</label>
 							<input type='text' value={this.state.email} placeholder="adress@example.com" onChange={evt => this.setState({ email: evt.target.value })} />
 							<label>password</label>

@@ -2,6 +2,7 @@ import React from "react";
 import { GraphQLClient } from 'graphql-request';
 import { Map, InfoWindow, Marker, GoogleApiWrapper } from 'google-maps-react';
 import promiseActionsMaker from '../store/action';
+import '../style/input.css';
 
 const gql = new GraphQLClient("/graphql", { headers: { "Authorization": "Bearer " + localStorage.getItem('authToken') } })
 
@@ -55,9 +56,9 @@ class Driver extends React.Component {
 	}
 	driverInLocation = () => {
 		return (
-			<div>
-				<button onClick={this.handleSubmit}>InLocation</button>
-				<button onClick={this.handleSubmitFinishOrder}>Finish order</button>
+			<div id="distance-duration">
+				<button onClick={this.handleSubmit} id="search-input-button-location">InLocation</button>
+				<button onClick={this.handleSubmitFinishOrder} id="search-input-button-location">Finish order</button>
 			</div>
 
 		);
